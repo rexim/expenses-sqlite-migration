@@ -7,3 +7,7 @@ migrate all of that to sqlite.
 ## Usage ##
 
     Usage: migrate.py <csv-file-expenses> <csv-file-places> <sqlite-output-file>
+
+## Unit Tests ##
+
+    ./migrate_test.py
