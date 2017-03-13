@@ -1,3 +1,5 @@
+<!-- TODO(1879352a-24dd-4639-8a78-5f677ec1590f): rename spendings -> expenses. Spending doesn't have plural form -->
+
 # Spendings Sqlite Migration
 
 I've been tracking all of my spendings since 07.06.2016 in a couple of
