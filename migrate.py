@@ -6,7 +6,7 @@ import sys
 
 def print_usage():
     print ("Usage: migrate.py "
-           "<csv-file-spendings> "
+           "<csv-file-expenses> "
            "<csv-file-places> "
            "<sqlite-output-file>")
 
@@ -17,13 +17,13 @@ def read_csv_table(file_name):
     raise NotImplementedError
 
 
-class SpendingsTable(object):
+class ExpensesTable(object):
     def __init__(self, csv_table):
         self.csv_table = csv_table
 
     def dump(self, database):
         # TODO(fa4dd258-7ad9-4e58-9b23-5ea5f07d988c): implement
-        # SpendingsTable.dump()
+        # ExpensesTable.dump()
         raise NotImplementedError
 
 
@@ -48,9 +48,9 @@ if __name__ == '__main__':
         print_usage()
         exit(1)
 
-    spendings_csv_table = read_csv_table(sys.argv[1])
+    expenses_csv_table = read_csv_table(sys.argv[1])
     places_csv_table = read_csv_table(sys.argv[2])
     database = SqliteDatabase(sys.argv[3])
 
-    SpendingsTable(spendings_csv_table).dump(database)
+    ExpensesTable(expenses_csv_table).dump(database)
     PlacesTable(places_csv_table).dump(database)

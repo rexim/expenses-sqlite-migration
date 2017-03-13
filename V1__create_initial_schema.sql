@@ -4,7 +4,7 @@ create table Places (
   address text not null
 );
 
-create table Spendings (
+create table Expenses (
   id integer primary key,
   date datetime not null,
   amount integer not null,
