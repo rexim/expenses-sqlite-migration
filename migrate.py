@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import csv
 
 
 def print_usage():
@@ -12,9 +13,9 @@ def print_usage():
 
 
 def read_csv_table(file_name):
-    # TODO(f49dfdb9-1566-4edb-b60b-aede0d4d6f65): implement
-    # read_csv_table()
-    raise NotImplementedError
+    with open(file_name, 'rb') as csvfile:
+        csvreader = csv.DictReader(csvfile)
+        return [row for row in csvreader]
 
 
 class ExpensesTable(object):
