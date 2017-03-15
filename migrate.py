@@ -18,14 +18,29 @@ def read_csv_table(file_name):
         return [row for row in csvreader]
 
 
+def org2sqlite_date(datestring):
+    # TODO(43d4478b-72f0-4eb0-af7e-875fc4a887f4): implement org2sqlite_date
+    #
+    # Split from fa4dd258-7ad9-4e58-9b23-5ea5f07d988c
+    raise NotImplementedError
+
+
+# TODO(fa4dd258-7ad9-4e58-9b23-5ea5f07d988c): implement ExpensesTable
+#
+# Pieces:
+# - 43d4478b-72f0-4eb0-af7e-875fc4a887f4
 class ExpensesTable(object):
     def __init__(self, csv_table):
-        self.csv_table = csv_table
+        self.records = [{'date': org2sqlite_date(row['date']),
+                         'amount': row['amount'],
+                         'name': row['name'],
+                         'category': row['category'],
+                         'place': row['place']}
+                        for row in csv_table]
 
     def dump(self, database):
-        # TODO(fa4dd258-7ad9-4e58-9b23-5ea5f07d988c): implement
-        # ExpensesTable.dump()
-        raise NotImplementedError
+        for record in self.records:
+            database.insert_into_table('Expenses', record)
 
 
 class PlacesTable(object):
