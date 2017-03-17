@@ -23,7 +23,9 @@ class SqliteDatabaseMock(object):
                               expected_records)
 
 
-# TODO(0aa53ea3-793f-4a1a-ac88-7fd0e5311cf8): decompose TestMigrate
+# TODO(0aa53ea3-793f-4a1a-ac88-7fd0e5311cf8): Split TestMigrate
+#
+# We need to simply split it by classes and methods.
 class TestMigrate(unittest.TestCase):
     # TODO(97c029b0-4d91-4784-855d-dd69a07278fe): create
     # test_csv_table file in tempdir before the test
