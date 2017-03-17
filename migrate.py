@@ -21,6 +21,8 @@ def read_csv_table(file_name):
                 for row in csvreader]
 
 
+# TODO(c3ee0412-31c7-4d7d-bd86-36ff23045542): move org2sqlite_date
+# inside of ExpensesTable
 def org2sqlite_date(datestring):
     m = re.match('<(\d{4}-\d{2}-\d{2}) ?\w*\.?( \d{2}:\d{2})?>',
                  datestring,
