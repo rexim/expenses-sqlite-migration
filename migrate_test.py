@@ -26,8 +26,12 @@ class SqliteDatabaseMock(object):
 class TestMigrate(unittest.TestCase):
     def test_read_csv_table(self):
         csv_table = read_csv_table("test_csv_table")
-        self.assertEqual(csv_table, [{'a': u'10', 'b': u'20'},
-                                     {'a': u'30', 'b': u'40'}])
+        self.assertEqual(csv_table, [{u'a': u'10',
+                                      u'b': u'20',
+                                      u'ы': u'привет'},
+                                     {u'a': u'30',
+                                      u'b': u'40',
+                                      u'ы': u'мир'}])
 
     def test_places_table(self):
         database = SqliteDatabaseMock()
