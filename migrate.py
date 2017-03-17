@@ -58,15 +58,12 @@ class PlacesTable(object):
             database.insert_into_table('Places', record)
 
 
+# TODO(8b124709-6f85-4e19-81e9-8dfd24bb32ce): implement SqliteDatabase
 class SqliteDatabase(object):
     def __init__(self, database_file_name):
-        # TODO(d33be76e-b54d-42c2-91d7-c9a09b79ee0e): implement
-        # SqliteDatabase constructor
         raise NotImplementedError
 
     def insert_into_table(self, table_name, record):
-        # TODO(ca10aaa6-b33c-4b44-b273-c136bd98247d): implement
-        # SqliteDatabase.insert_into_table()
         raise NotImplementedError
 
 if __name__ == '__main__':
