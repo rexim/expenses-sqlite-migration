@@ -26,55 +26,64 @@ class SqliteDatabaseMock(object):
 class TestMigrate(unittest.TestCase):
     def test_read_csv_table(self):
         csv_table = read_csv_table("test_csv_table")
-        self.assertEqual(csv_table, [{'a': '10', 'b': '20'},
-                                     {'a': '30', 'b': '40'}])
+        self.assertEqual(csv_table, [{'a': u'10', 'b': u'20'},
+                                     {'a': u'30', 'b': u'40'}])
 
     def test_places_table(self):
         database = SqliteDatabaseMock()
-        PlacesTable([{'id': 'foo',
-                      'address': 'bar'},
-                     {'id': 'hello',
-                      'address': 'world'}]).dump(database)
+        PlacesTable([{'id': u'foo',
+                      'address': u'bar'},
+                     {'id': u'hello',
+                      'address': u'world'}]).dump(database)
         database.assert_expected_records(self, 'Places',
-                                         [{'codename': 'foo',
-                                           'address': 'bar'},
-                                          {'codename': 'hello',
-                                           'address': 'world'}])
+                                         [{'codename': u'foo',
+                                           'address': u'bar'},
+                                          {'codename': u'hello',
+                                           'address': u'world'}])
 
-    @unittest.skip('Waiting for 43d4478b-72f0-4eb0-af7e-875fc4a887f4')
+    def test_org2sqlite_date(self):
+        self.assertEqual(org2sqlite_date(u"<2016-06-07 Tue>"),
+                         u"datetime('2016-06-07')")
+        self.assertEqual(org2sqlite_date(u"<2016-06-58 Привет>"),
+                         u"datetime('2016-06-58')")
+        self.assertEqual(org2sqlite_date(u"<2016-06-58 Мир.>"),
+                         u"datetime('2016-06-58')")
+        self.assertEqual(org2sqlite_date(u"<2016-06-06 Mon 12:60>"),
+                         u"datetime('2016-06-06 12:60')")
+
     def test_expenses_table(self):
         database = SqliteDatabaseMock()
-        ExpensesTable([{'date': '<2016-06-07 Tue>',
-                        'amount': '-105.00',
-                        'name': 'Hello',
-                        'category': 'misc',
-                        'place': ''},
-                       {'date': '<2016-06-07 Tue 12:50>',
-                        'amount': '-0.0',
-                        'name': 'Привет',
-                        'category': 'food',
-                        'place': 'foo'},
-                       {'date': '<2016-06-09 Чт. 12:39>',
-                        'amount': '-1000.00',
-                        'name': 'Hello Мир',
-                        'category': 'communications',
-                        'place': 'test'}]).dump(database)
+        ExpensesTable([{'date': u'<2016-06-07 Tue>',
+                        'amount': u'-105.00',
+                        'name': u'Hello',
+                        'category': u'misc',
+                        'place': u''},
+                       {'date': u'<2016-06-07 Tue 12:50>',
+                        'amount': u'-0.0',
+                        'name': u'Привет',
+                        'category': u'food',
+                        'place': u'foo'},
+                       {'date': u'<2016-06-09 Чт. 12:39>',
+                        'amount': u'-1000.00',
+                        'name': u'Hello Мир',
+                        'category': u'communications',
+                        'place': u'test'}]).dump(database)
 
-        expected_records = [{"date": "datetime('2016-06-07')",
-                             "amount": "-105.00",
-                             "name": "Hello",
-                             "category": "misc",
-                             "place": ""},
-                            {"date": "datetime('2016-06-07 12:50')",
-                             "amount": "-0.0",
-                             "name": "Привет",
-                             "category": "food",
-                             "place": "foo"},
-                            {"date": "datetime('2016-06-09 12:39')",
-                             "amount": "-1000.00",
-                             "name": "Hello Мир",
-                             "category": "communications",
-                             "place": "test"}]
+        expected_records = [{"date": u"datetime('2016-06-07')",
+                             "amount": u"-105.00",
+                             "name": u"Hello",
+                             "category": u"misc",
+                             "place": u""},
+                            {"date": u"datetime('2016-06-07 12:50')",
+                             "amount": u"-0.0",
+                             "name": u"Привет",
+                             "category": u"food",
+                             "place": u"foo"},
+                            {"date": u"datetime('2016-06-09 12:39')",
+                             "amount": u"-1000.00",
+                             "name": u"Hello Мир",
+                             "category": u"communications",
+                             "place": u"test"}]
 
         database.assert_expected_records(self, 'Expenses', expected_records)
 

@@ -3,6 +3,7 @@
 
 import sys
 import csv
+import re
 
 
 def print_usage():
@@ -19,16 +20,17 @@ def read_csv_table(file_name):
 
 
 def org2sqlite_date(datestring):
-    # TODO(43d4478b-72f0-4eb0-af7e-875fc4a887f4): implement org2sqlite_date
-    #
-    # Split from fa4dd258-7ad9-4e58-9b23-5ea5f07d988c
-    raise NotImplementedError
+    m = re.match('<(\d{4}-\d{2}-\d{2}) ?\w*\.?( \d{2}:\d{2})?>',
+                 datestring,
+                 re.UNICODE)
+    (d, t) = m.groups()
+
+    if t is None:
+        t = ''
+
+    return "datetime('%s%s')" % (d, t)
 
 
-# TODO(fa4dd258-7ad9-4e58-9b23-5ea5f07d988c): implement ExpensesTable
-#
-# Pieces:
-# - 43d4478b-72f0-4eb0-af7e-875fc4a887f4
 class ExpensesTable(object):
     def __init__(self, csv_table):
         self.records = [{'date': org2sqlite_date(row['date']),
