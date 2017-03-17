@@ -13,6 +13,8 @@ def print_usage():
            "<sqlite-output-file>")
 
 
+# TODO(d3505801-d881-4c99-997c-f6b7bc165ded): assume that the file is
+# in Unicode
 def read_csv_table(file_name):
     with open(file_name, 'rb') as csvfile:
         csvreader = csv.DictReader(csvfile)
