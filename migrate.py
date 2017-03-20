@@ -75,6 +75,10 @@ class SqliteDatabase(object):
 
         self.database_connection.execute(query, record)
 
+    def commit(self):
+        self.database_connection.commit()
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         print_usage()
@@ -86,3 +90,5 @@ if __name__ == '__main__':
 
     PlacesTable(places_csv_table).dump(database)
     ExpensesTable(expenses_csv_table).dump(database)
+
+    database.commit()

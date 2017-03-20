@@ -101,9 +101,16 @@ class TestMigrate(unittest.TestCase):
 class SqliteConnectionMock(object):
     def __init__(self):
         self.queries = []
+        self.committed = False
 
     def execute(self, query, parameters={}):
         self.queries.append((query, parameters))
+
+    def commit(self):
+        self.committed = True
+
+    def assert_committed(self, test_case):
+        test_case.assertTrue(self.committed)
 
     def assert_expected_queries(self, test_case, expected_queries):
         test_case.assertEqual(self.queries, expected_queries)
@@ -138,6 +145,13 @@ class SqliteDatabaseTest(unittest.TestCase):
                               'c': 'd'})]
 
         connection.assert_expected_queries(self, expected_queries)
+
+    def test_commit(self):
+        connection = SqliteConnectionMock()
+        database = SqliteDatabase(connection)
+
+        database.commit()
+        connection.assert_committed(self)
 
 
 if __name__ == '__main__':
