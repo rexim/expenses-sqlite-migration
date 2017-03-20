@@ -10,6 +10,5 @@ create table Expenses (
   amount integer not null,
   name text not null,
   category text not null,
-  place text,
-  foreign key (place_id) references Places(id)
+  place text
 );
