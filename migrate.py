@@ -66,9 +66,10 @@ class SqliteDatabase(object):
         self.database_connection = database_connection
 
     def insert_into_table(self, table_name, record):
-        column_names = ', '.join(record.keys())
+        record_keys = record.keys()
+        column_names = ', '.join(record_keys)
         column_values = ', '.join(map(lambda name: ':' + name,
-                                      record.keys()))
+                                      record_keys))
         query = 'INSERT INTO %s (%s) VALUES (%s)' % (table_name,
                                                      column_names,
                                                      column_values)
