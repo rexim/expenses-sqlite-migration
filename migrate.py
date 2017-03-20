@@ -4,6 +4,7 @@
 import sys
 import csv
 import re
+import sqlite3
 
 
 def print_usage():
@@ -62,7 +63,7 @@ class PlacesTable(object):
 
 # TODO(8b124709-6f85-4e19-81e9-8dfd24bb32ce): implement SqliteDatabase
 class SqliteDatabase(object):
-    def __init__(self, database_file_name):
+    def __init__(self, database_connection):
         raise NotImplementedError
 
     def insert_into_table(self, table_name, record):
@@ -75,7 +76,7 @@ if __name__ == '__main__':
 
     expenses_csv_table = read_csv_table(sys.argv[1])
     places_csv_table = read_csv_table(sys.argv[2])
-    database = SqliteDatabase(sys.argv[3])
+    database = SqliteDatabase(sqlite3.connect(sys.argv[3]))
 
     PlacesTable(places_csv_table).dump(database)
     ExpensesTable(expenses_csv_table).dump(database)
