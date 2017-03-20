@@ -61,13 +61,19 @@ class PlacesTable(object):
             database.insert_into_table('Places', record)
 
 
-# TODO(8b124709-6f85-4e19-81e9-8dfd24bb32ce): implement SqliteDatabase
 class SqliteDatabase(object):
     def __init__(self, database_connection):
-        raise NotImplementedError
+        self.database_connection = database_connection
 
     def insert_into_table(self, table_name, record):
-        raise NotImplementedError
+        column_names = ', '.join(record.keys())
+        column_values = ', '.join(map(lambda name: ':' + name,
+                                      record.keys()))
+        query = 'INSERT INTO %s (%s) VALUES (%s)' % (table_name,
+                                                     column_names,
+                                                     column_values)
+
+        self.database_connection.execute(query, record)
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:

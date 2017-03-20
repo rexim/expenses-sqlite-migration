@@ -97,5 +97,48 @@ class TestMigrate(unittest.TestCase):
 
         database.assert_expected_records(self, 'Expenses', expected_records)
 
+
+class SqliteConnectionMock(object):
+    def __init__(self):
+        self.queries = []
+
+    def execute(self, query, parameters={}):
+        self.queries.append((query, parameters))
+
+    def assert_expected_queries(self, test_case, expected_queries):
+        test_case.assertEqual(self.queries, expected_queries)
+
+
+class SqliteDatabaseTest(unittest.TestCase):
+    def test_insert_into_table(self):
+        connection = SqliteConnectionMock()
+        database = SqliteDatabase(connection)
+
+        database.insert_into_table('Hello', {'number': '1',
+                                             'name': 'Foo'})
+        database.insert_into_table('Hello', {'number': '2',
+                                             'name': 'Bar'})
+        database.insert_into_table('World', {'a': 'b',
+                                             'c': 'd'})
+
+        expected_queries = [('INSERT INTO Hello '
+                             '(number, name) '
+                             'VALUES (:number, :name)',
+                             {'number': '1',
+                              'name': 'Foo'}),
+                            ('INSERT INTO '
+                             'Hello (number, name) '
+                             'VALUES (:number, :name)',
+                             {'number': '2',
+                              'name': 'Bar'}),
+                            ('INSERT INTO '
+                             'World (a, c) '
+                             'VALUES (:a, :c)',
+                             {'a': 'b',
+                              'c': 'd'})]
+
+        connection.assert_expected_queries(self, expected_queries)
+
+
 if __name__ == '__main__':
     unittest.main()
