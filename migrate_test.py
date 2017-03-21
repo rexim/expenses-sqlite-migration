@@ -101,10 +101,14 @@ class TestMigrate(unittest.TestCase):
 class SqliteConnectionMock(object):
     def __init__(self):
         self.queries = []
+        self.scripts = []
         self.committed = False
 
     def execute(self, query, parameters={}):
         self.queries.append((query, parameters))
+
+    def executescript(self, sql_script):
+        self.scripts.append(sql_script)
 
     def commit(self):
         self.committed = True
@@ -115,8 +119,32 @@ class SqliteConnectionMock(object):
     def assert_expected_queries(self, test_case, expected_queries):
         test_case.assertEqual(self.queries, expected_queries)
 
+    def assert_expected_scripts(self, test_case, expected_scripts):
+        test_case.assertEqual(self.scripts, expected_scripts)
+
 
 class SqliteDatabaseTest(unittest.TestCase):
+    def test_init(self):
+        expected_scripts = [('create table if not exists Places ('
+                             '  id integer primary key,'
+                             '  codename text not null,'
+                             '  address text not null'
+                             ');'
+                             'create table if not exists Expenses ('
+                             '  id integer primary key,'
+                             '  date datetime not null,'
+                             '  amount integer not null,'
+                             '  name text not null,'
+                             '  category text not null,'
+                             '  place text'
+                             ');')]
+
+        connection = SqliteConnectionMock()
+        SqliteDatabase(connection)
+
+        connection.assert_expected_scripts(self, expected_scripts)
+        connection.assert_committed(self)
+
     def test_insert_into_table(self):
         connection = SqliteConnectionMock()
         database = SqliteDatabase(connection)

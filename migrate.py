@@ -65,6 +65,23 @@ class SqliteDatabase(object):
     def __init__(self, database_connection):
         self.database_connection = database_connection
 
+        schema_init_script = ('create table if not exists Places ('
+                              '  id integer primary key,'
+                              '  codename text not null,'
+                              '  address text not null'
+                              ');'
+                              'create table if not exists Expenses ('
+                              '  id integer primary key,'
+                              '  date datetime not null,'
+                              '  amount integer not null,'
+                              '  name text not null,'
+                              '  category text not null,'
+                              '  place text'
+                              ');')
+
+        database_connection.executescript(schema_init_script)
+        database_connection.commit()
+
     def insert_into_table(self, table_name, record):
         record_keys = record.keys()
         column_names = ', '.join(record_keys)
