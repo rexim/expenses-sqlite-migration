@@ -95,17 +95,17 @@ class TestMigrate(unittest.TestCase):
                         'place': u'test'}]).dump(database)
 
         expected_records = [{"date": datetime(2016, 6, 7),
-                             "amount": u"-105.00",
+                             "amount": -10500,
                              "name": u"Hello",
                              "category": u"misc",
                              "place": u""},
                             {"date": datetime(2016, 6, 7, 12, 50),
-                             "amount": u"-0.0",
+                             "amount": 0,
                              "name": u"Привет",
                              "category": u"food",
                              "place": u"foo"},
                             {"date": datetime(2016, 6, 9, 12, 39),
-                             "amount": u"-1000.00",
+                             "amount": -100000,
                              "name": u"Hello Мир",
                              "category": u"communications",
                              "place": u"test"}]

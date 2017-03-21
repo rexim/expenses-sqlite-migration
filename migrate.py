@@ -43,7 +43,7 @@ def org2sqlite_date(datestring):
 class ExpensesTable(object):
     def __init__(self, csv_table):
         self.records = [{'date': org2sqlite_date(row['date']),
-                         'amount': row['amount'],
+                         'amount': int(float(row['amount']) * 100.00),
                          'name': row['name'],
                          'category': row['category'],
                          'place': row['place']}
