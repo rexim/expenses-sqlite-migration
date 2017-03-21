@@ -74,7 +74,7 @@ class TestMigrate(unittest.TestCase):
                          datetime(2016, 6, 9))
 
         self.assertEqual(org2sqlite_date(u"<2016-06-06 Mon 12:59>"),
-                         datetime(2016, 06, 06, 12, 59))
+                         datetime(2016, 6, 6, 12, 59))
 
     def test_expenses_table(self):
         database = SqliteDatabaseMock()
