@@ -48,6 +48,7 @@ class ExpensesTable(object):
     def dump(self, database):
         for record in self.records:
             database.insert_into_table('Expenses', record)
+        database.commit()
 
 
 class PlacesTable(object):
@@ -59,6 +60,7 @@ class PlacesTable(object):
     def dump(self, database):
         for record in self.records:
             database.insert_into_table('Places', record)
+        database.commit()
 
 
 class SqliteDatabase(object):
@@ -108,5 +110,3 @@ if __name__ == '__main__':
 
     PlacesTable(places_csv_table).dump(database)
     ExpensesTable(expenses_csv_table).dump(database)
-
-    database.commit()

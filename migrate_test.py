@@ -8,6 +8,7 @@ from migrate import *
 class SqliteDatabaseMock(object):
     def __init__(self):
         self.database = {}
+        self.committed = False
 
     def insert_into_table(self, table_name, record):
         if table_name not in self.database:
@@ -15,12 +16,18 @@ class SqliteDatabaseMock(object):
 
         self.database[table_name].append(record)
 
+    def commit(self):
+        self.committed = True
+
     def assert_expected_records(self,
                                 test_case,
                                 table_name,
                                 expected_records):
         test_case.assertEqual(self.database[table_name],
                               expected_records)
+
+    def assert_committed(self, test_case):
+        test_case.assertTrue(self.committed)
 
 
 # TODO(0aa53ea3-793f-4a1a-ac88-7fd0e5311cf8): Split TestMigrate
@@ -50,6 +57,7 @@ class TestMigrate(unittest.TestCase):
                                            'address': u'bar'},
                                           {'codename': u'hello',
                                            'address': u'world'}])
+        database.assert_committed(self)
 
     def test_org2sqlite_date(self):
         self.assertEqual(org2sqlite_date(u"<2016-06-07 Tue>"),
@@ -96,6 +104,7 @@ class TestMigrate(unittest.TestCase):
                              "place": u"test"}]
 
         database.assert_expected_records(self, 'Expenses', expected_records)
+        database.assert_committed(self)
 
 
 class SqliteConnectionMock(object):
