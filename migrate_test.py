@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+from datetime import datetime
 from migrate import *
 
 
@@ -61,13 +62,19 @@ class TestMigrate(unittest.TestCase):
 
     def test_org2sqlite_date(self):
         self.assertEqual(org2sqlite_date(u"<2016-06-07 Tue>"),
-                         u"datetime('2016-06-07')")
-        self.assertEqual(org2sqlite_date(u"<2016-06-58 Привет>"),
-                         u"datetime('2016-06-58')")
-        self.assertEqual(org2sqlite_date(u"<2016-06-58 Мир.>"),
-                         u"datetime('2016-06-58')")
-        self.assertEqual(org2sqlite_date(u"<2016-06-06 Mon 12:60>"),
-                         u"datetime('2016-06-06 12:60')")
+                         datetime(2016, 6, 7))
+
+        with self.assertRaises(ValueError):
+            org2sqlite_date(u"<2016-06-58 Привет>")
+
+        self.assertEqual(org2sqlite_date(u"<2016-06-08 Привет>"),
+                         datetime(2016, 6, 8))
+
+        self.assertEqual(org2sqlite_date(u"<2016-06-09 Мир.>"),
+                         datetime(2016, 6, 9))
+
+        self.assertEqual(org2sqlite_date(u"<2016-06-06 Mon 12:59>"),
+                         datetime(2016, 06, 06, 12, 59))
 
     def test_expenses_table(self):
         database = SqliteDatabaseMock()
@@ -87,17 +94,17 @@ class TestMigrate(unittest.TestCase):
                         'category': u'communications',
                         'place': u'test'}]).dump(database)
 
-        expected_records = [{"date": u"datetime('2016-06-07')",
+        expected_records = [{"date": datetime(2016, 6, 7),
                              "amount": u"-105.00",
                              "name": u"Hello",
                              "category": u"misc",
                              "place": u""},
-                            {"date": u"datetime('2016-06-07 12:50')",
+                            {"date": datetime(2016, 6, 7, 12, 50),
                              "amount": u"-0.0",
                              "name": u"Привет",
                              "category": u"food",
                              "place": u"foo"},
-                            {"date": u"datetime('2016-06-09 12:39')",
+                            {"date": datetime(2016, 6, 9, 12, 39),
                              "amount": u"-1000.00",
                              "name": u"Hello Мир",
                              "category": u"communications",

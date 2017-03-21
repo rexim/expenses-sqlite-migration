@@ -5,6 +5,7 @@ import sys
 import csv
 import re
 import sqlite3
+from datetime import datetime
 
 
 def print_usage():
@@ -25,15 +26,18 @@ def read_csv_table(file_name):
 # TODO(c3ee0412-31c7-4d7d-bd86-36ff23045542): move org2sqlite_date
 # inside of ExpensesTable
 def org2sqlite_date(datestring):
-    m = re.match('<(\d{4}-\d{2}-\d{2}) ?\w*\.?( \d{2}:\d{2})?>',
+    m = re.match('<(\d{4})-(\d{2})-(\d{2}) ?\w*\.?(?: (\d{2}):(\d{2}))?>',
                  datestring,
                  re.UNICODE)
-    (d, t) = m.groups()
+    (year, month, day, hours, minutes) = m.groups()
 
-    if t is None:
-        t = ''
+    if hours is None:
+        hours = 0
 
-    return "datetime('%s%s')" % (d, t)
+    if minutes is None:
+        minutes = 0
+
+    return datetime(int(year), int(month), int(day), int(hours), int(minutes))
 
 
 class ExpensesTable(object):
